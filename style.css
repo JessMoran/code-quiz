@@ -1,0 +1,8 @@
+body {
+  font-family: 'Balsamiq Sans', cursive;
+}
+
+button:focus {
+  outline: 0 !important;
+  box-shadow: none;
+}

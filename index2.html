@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Code Quiz</title>
+</head>
+<body>
+  <div class="row-span-1 bg-indigo-900 py-8">
+    <div class="grid grid-flow-col grid-cols-5">
+      <div class="col-start-3 text-center">
+        <h1 class="text-2xl text-indigo-100">Coding Quiz Challenge</h1>
+      </div>
+      <div class="col-start-5 p-2 bg-indigo-800 items-center leading-none lg:rounded-full flex lg:inline-flex w-2/5 mx-auto" role="alert">
+        <span class="font-semibold text-indigo-100 mx-2 text-left">Time</span>
+        <span class="flex text-indigo-100 rounded-full bg-indigo-500 px-2 py-1 text-xs font-bold mr-3">1:00</span>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-flow-col grid-cols-3 mt-20">
+    <div class="col-start-2 text-center">
+      <p class="text-indigo-500 text-3xl">Java Script Quiz</p>
+    </div>
+    <div class="col-start-2 text-center">
+      <p id="qnTag" class="my-10">Try to answer the following code-related questions within the time. Keep in mind that incorrect answers will penalize your score time by ten seconds</p>
+    </div>
+    <div id="options" class="col-start-2 text-center">
+    <button id="startBtn" class="shadow-none outline-none text-indigo-100 bg-indigo-500 text-white font-bold py-2 px-4 rounded-full">
+      Start Quiz
+    </button>
+  </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
