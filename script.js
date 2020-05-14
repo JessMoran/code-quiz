@@ -52,8 +52,6 @@ let qnsObj = {
 
 startBtn.addEventListener("click", function() {
   for (const qn in qnsObj) {
-    let randomNum = Math.floor(Math.random() * 4);
-    let option =
-    console.log(randomOpt);
+    console.log(`${qn}: ${qnsObj[qn]}`);
   }
 });
