@@ -3,8 +3,11 @@ const title = document.getElementById('title');
 const qnTag = document.getElementById('qnTag');
 const opts = document.getElementById('options');
 const startBtn = document.getElementById('startBtn');
+const submitTag = document.getElementById('submitTag');
 const mins = document.getElementById('minutes');
 const secs = document.getElementById('seconds');
+
+
 
 
 let qunsArr = [
@@ -68,9 +71,15 @@ startBtn.addEventListener("click", function() {
   opts.className = 'mb-12';
 
   let optsChild = opts.childNodes;
-  if (opts.childNodes )
-  optsChild
-  opts.removeChild();
+
+  while (opts.firstChild) {
+    opts.removeChild(opts.firstChild);
+  }
+
+  if ( currentIndex === qunsArr.length ) {
+    displaySubmit();
+    return;
+  }
 
   let currentEl = qunsArr[currentIndex];
 
@@ -90,5 +99,38 @@ startBtn.addEventListener("click", function() {
   currentIndex++;
 });
 
+function displaySubmit () {
+    qnTag.innerText = 'Your final Score is:';
+    title.innerText = 'All done!';
+    startBtn.className = 'hidden';
 
+    let inputInitials = document.createElement('input');
+    let submitBtn = document.createElement('button');
+
+    inputInitials.className = 'bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal';
+    inputInitials.setAttribute('placeholder','Enter initials');
+    submitBtn.className = 'block mx-auto text-indigo-100 rounded-full bg-indigo-500 px-2 py-2 text-sm font-bold mx-3 mb-3';
+    submitBtn.id = 'submitBtn';
+    submitBtn.innerText = 'Submit';
+
+    opts.appendChild(inputInitials);
+    submitTag.appendChild(submitBtn);
+
+    submitBtn.addEventListener("click", function() {
+      title.innerText = 'Highscores';
+      let highscoreDiv = document.createElement('div');
+      let namePharagraph = document.createElement('p');
+      let scoreParagraph = document.createElement('p');
+
+      highscoreDiv.className = 'bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-10';
+      namePharagraph.className = 'font-bold';
+      submitBtn.innerText = 'Try again';
+      qnTag.className = 'hidden';
+      inputInitials.className = 'hidden'
+
+      opts.appendChild(highscoreDiv);
+      highscoreDiv.appendChild(namePharagraph);
+      highscoreDiv.appendChild(scoreParagraph);
+    });
+}
 
