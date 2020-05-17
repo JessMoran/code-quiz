@@ -1,15 +1,19 @@
-
+//Global variables
 const title = document.getElementById('title');
+const sectionCont = document.getElementById('sectionCont');
 const qnTag = document.getElementById('qnTag');
-const opts = document.getElementById('options');
+const optsCont = document.getElementById('optionsCont');
 const startBtn = document.getElementById('startBtn');
-const submitTag = document.getElementById('submitTag');
+const submitCont = document.getElementById('submitCont');
+const validationCont = document.getElementById('validationCont');
 const mins = document.getElementById('minutes');
 const secs = document.getElementById('seconds');
+let currentIndex = 0;
+let currentEl;
+let score = 0;
+let initials = '';
 
-
-
-
+//Data
 let qunsArr = [
   {
     qn: 'Inside which HTML element do we put the JavaScript?',
@@ -19,7 +23,7 @@ let qunsArr = [
       opt3: '<script>',
       opt4: '<scripting>'
     },
-    correct: 'opt3',
+    correct: 'opt1',
   },
   {
     qn: 'What is the correct JavaScript syntax to change the content of the HTML element below? <p id="demo">This is a demonstration.</p>',
@@ -29,7 +33,7 @@ let qunsArr = [
       opt3: 'document.getElement("p").innerHTML = "Hello World!";',
       opt4: 'document.getElementByName("p").innerHTML = "Hello World!";'
     },
-    correct: 'opt2',
+    correct: 'opt1',
   },
   {
     qn: 'Where is the correct place to insert a JavaScript?',
@@ -39,7 +43,7 @@ let qunsArr = [
       opt3: 'Both the <head> section and the <body> section are correct',
       opt4: 'The <html> section'
     },
-    correct: 'opt3',
+    correct: 'opt1',
   },
   {
     qn: 'What is the correct syntax for referring to an external script called "xxx.js"?',
@@ -49,7 +53,7 @@ let qunsArr = [
       opt3: '<script src="xxx.js">',
       opt4: '<script alt="xxx.js">'
     },
-     correct: 'opt3',
+    correct: 'opt1',
   },
   {
     qn: 'How do you write "Hello World" in an alert box?',
@@ -59,29 +63,27 @@ let qunsArr = [
       opt3: 'alertBox("Hello World");',
       opt4: 'msg("Hello World");'
     },
-    correct: 'opt2'
+    correct: 'opt1'
   }
-  ];
+];
 
-let currentIndex = 0;
+startBtn.addEventListener("click", function () {
+  //Call timer function
 
-startBtn.addEventListener("click", function() {
-
-  startBtn.innerText = 'Siguiente';
-  opts.className = 'mb-12';
-
-  let optsChild = opts.childNodes;
-
-  while (opts.firstChild) {
-    opts.removeChild(opts.firstChild);
+  while (optsCont.firstChild) {
+    optsCont.removeChild(optsCont.firstChild);
   }
 
-  if ( currentIndex === qunsArr.length ) {
+  while (validationCont.firstChild) {
+    validationCont.removeChild(validationCont.firstChild);
+  }
+
+  if (currentIndex === qunsArr.length) {
     displaySubmit();
     return;
   }
 
-  let currentEl = qunsArr[currentIndex];
+  currentEl = qunsArr[currentIndex];
 
   let question = currentEl.qn;
 
@@ -89,48 +91,113 @@ startBtn.addEventListener("click", function() {
 
   let answers = currentEl.ans;
 
-  for ( const opt in answers )  {
+  for (const opt in answers) {
+    //Create elements
     let ansBtn = document.createElement('button');
-    ansBtn.className = 'block text-indigo-100 rounded-full bg-indigo-800 px-2 py-2 text-sm font-bold mx-3 mb-3';
+
+    //Set attributes
+    ansBtn.className = 'bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full block text-left my-3';
+    ansBtn.setAttribute('value', opt);
+
+    //Change text
     ansBtn.innerText = answers[opt];
-    opts.appendChild(ansBtn);
+    startBtn.innerText = 'Siguiente';
+
+    //Append children
+    optsCont.appendChild(ansBtn);
   }
 
+  //Increment current index +1
   currentIndex++;
 });
 
-function displaySubmit () {
-    qnTag.innerText = 'Your final Score is:';
-    title.innerText = 'All done!';
-    startBtn.className = 'hidden';
+//Validate answers
+optsCont.addEventListener('click', function (e) {
+  if (e.target.value === currentEl.correct) {
 
-    let inputInitials = document.createElement('input');
-    let submitBtn = document.createElement('button');
+    let correctIcon = document.createElement('i');
+    let correctText = document.createElement('span');
+    correctIcon.className = 'fas fa-check text-indigo-500';
+    correctText.className = 'text-indigo-800';
+    correctText.innerText = ' Correct';
+    validationCont.className = 'my-5';
 
-    inputInitials.className = 'bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal';
-    inputInitials.setAttribute('placeholder','Enter initials');
-    submitBtn.className = 'block mx-auto text-indigo-100 rounded-full bg-indigo-500 px-2 py-2 text-sm font-bold mx-3 mb-3';
-    submitBtn.id = 'submitBtn';
-    submitBtn.innerText = 'Submit';
+    validationCont.appendChild(correctIcon);
+    validationCont.appendChild(correctText);
 
-    opts.appendChild(inputInitials);
-    submitTag.appendChild(submitBtn);
+    score++;
+  } else {
+    let incorrectIcon = document.createElement('i');
+    let incorrectText = document.createElement('span');
+    incorrectIcon.className = 'fas fa-times text-indigo-500';
+    incorrectText.className = 'text-indigo-800';
+    incorrectText.innerText = ' Wrong';
+    validationCont.className = 'my-5';
 
-    submitBtn.addEventListener("click", function() {
-      title.innerText = 'Highscores';
-      let highscoreDiv = document.createElement('div');
-      let namePharagraph = document.createElement('p');
-      let scoreParagraph = document.createElement('p');
+    validationCont.appendChild(incorrectIcon);
+    validationCont.appendChild(incorrectText);
+  }
+});
 
-      highscoreDiv.className = 'bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-10';
-      namePharagraph.className = 'font-bold';
-      submitBtn.innerText = 'Try again';
-      qnTag.className = 'hidden';
-      inputInitials.className = 'hidden'
+function displaySubmit() {
+  // Clear validation container
+  while (validationCont.firstChild) {
+    validationCont.removeChild(validationCont.firstChild);
+  }
 
-      opts.appendChild(highscoreDiv);
-      highscoreDiv.appendChild(namePharagraph);
-      highscoreDiv.appendChild(scoreParagraph);
-    });
+  //Create elements
+  let inputInitials = document.createElement('input');
+  let submitBtn = document.createElement('button');
+
+  //Set classes and attributes
+  inputInitials.className = 'bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal';
+  inputInitials.setAttribute('placeholder', 'Enter initials');
+  submitBtn.className = 'bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full block text-left my-3';
+  submitBtn.id = 'submitBtn';
+  startBtn.className = 'hidden';
+  submitCont.className = 'col-start-2 text-center mt-8';
+
+  //Change text
+  qnTag.innerText = 'Your final Score is: ' + score;
+  title.innerText = 'All done!';
+  submitBtn.innerText = 'Submit';
+
+  //Append children
+  sectionCont.appendChild(inputInitials);
+  submitCont.appendChild(submitBtn);
+
+  inputInitials.addEventListener("keyup", function () {
+    initials = inputInitials.value;
+  });
+
+  //
+  submitBtn.addEventListener("click", function () {
+    //Create elements
+    let highscoreDiv = document.createElement('div');
+    let namePharagraph = document.createElement('span');
+    let scoreParagraph = document.createElement('span');
+    let clearBtn = document.createElement('button');
+
+    //Change text
+    title.innerText = 'Highscores';
+    submitBtn.innerText = 'Try again';
+    clearBtn.innerText = 'Clear Scores';
+
+    //Set classes and attributes
+    clearBtn.className = 'bg-transparent hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white p-2 border border-indigo-500 hover:border-transparent rounded-full my-3 ml-3';
+    highscoreDiv.className = 'bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-10 text-left';
+    namePharagraph.className = 'font-bold mr-5';
+    qnTag.className = 'hidden';
+    inputInitials.className = 'hidden';
+    namePharagraph.innerText = initials;
+    scoreParagraph.innerText = score;
+    submitCont.className = 'col-start-2 flex mt-8 mx-auto';
+
+    //Append children
+    sectionCont.appendChild(highscoreDiv);
+    highscoreDiv.appendChild(namePharagraph);
+    highscoreDiv.appendChild(scoreParagraph);
+    submitCont.appendChild(clearBtn);
+  });
 }
 

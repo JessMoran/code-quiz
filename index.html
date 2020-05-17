@@ -3,6 +3,7 @@
 <head>
   <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/9e5ac04d15.js" crossorigin="anonymous"></script>
   <meta charset="UTF-8">
   <title>Code Quiz</title>
 </head>
@@ -27,20 +28,22 @@
   <div class="col-start-2 text-center">
     <p id="title" class="text-indigo-500 text-3xl">Java Script Quiz</p>
   </div>
-  <div class="col-start-2 text-center">
+  <div id="sectionCont" class="col-start-2 text-center">
     <p id="qnTag" class="my-10">Try to answer the following code-related questions within the time. Keep in mind that
       incorrect answers will penalize your score time by ten seconds</p>
   </div>
   <div class="col-start-2 text-center">
-    <div id="options"></div>
+      <div id="optionsCont"></div>
   </div>
-  <div id="submitTag" class="col-start-2 text-center">
+  <div class="col-start-2 text-center">
+      <div id="validationCont"></div>
+  </div>
+  <div id="submitCont" class="col-start-2 text-center">
     <button id="startBtn"
-            class="mx-auto shadow-none outline-none text-indigo-100 bg-indigo-500 text-white font-bold py-2 px-4 rounded-full">
+             class="bg-transparent hover:bg-indigo-800 text-indigo-700 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded-full block mx-auto my-5">
       Start Quiz
     </button>
   </div>
-
 </div>
 <script src="script.js"></script>
 </body>
