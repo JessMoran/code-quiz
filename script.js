@@ -6,7 +6,6 @@ const optsCont = document.getElementById('optionsCont');
 const startBtn = document.getElementById('startBtn');
 const submitCont = document.getElementById('submitCont');
 const validationCont = document.getElementById('validationCont');
-const mins = document.getElementById('minutes');
 const secs = document.getElementById('seconds');
 let currentIndex = 0;
 let currentEl;
@@ -15,6 +14,24 @@ let initials = '';
 let nameInitials = '';
 let scoreKey = '';
 let id = 0;
+let secondsLeft = 60;
+
+//Set Timer
+function setTime () {
+  let timeInterval = setInterval(function() {
+    secondsLeft --;
+    secs.textContent = secondsLeft;
+
+    if ( secondsLeft === 0 ) {
+      clearInterval(timeInterval);
+
+      title.innerText = 'Good try!';
+
+      return secondsLeft;
+    }
+
+  }, 1000);
+}
 
 //Data
 let qunsArr = [
@@ -73,6 +90,7 @@ let qunsArr = [
 //Run the function after click
 startBtn.addEventListener("click", function () {
   //Call timer function
+  setTime();
 
   //Run the function until the optsContainer has no children
   while (optsCont.firstChild) {
@@ -91,12 +109,14 @@ startBtn.addEventListener("click", function () {
     return;
   }
 
+  //Reassignment the currentEl value according to the index's array
   currentEl = qunsArr[currentIndex];
 
+  //Set variable with the current answer' object  and change the qnTag text
   let question = currentEl.qn;
-
   qnTag.innerText = question;
 
+  //Set variable with the current answer' object
   let answers = currentEl.ans;
 
   //Loop the answers object and gets the options
