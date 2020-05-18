@@ -13,16 +13,15 @@ let score = 0;
 let initials = '';
 let nameInitials = '';
 let scoreKey = '';
-let id = 0;
 let secondsLeft = 60;
 
 //Set Timer
-function setTime () {
-  let timeInterval = setInterval(function() {
-    secondsLeft --;
+function setTime() {
+  let timeInterval = setInterval(function () {
+    secondsLeft--;
     secs.textContent = secondsLeft;
 
-    if ( secondsLeft === 0 ) {
+    if (secondsLeft === 0) {
       clearInterval(timeInterval);
 
       title.innerText = 'Good try!';
@@ -206,47 +205,65 @@ function displaySubmit() {
 
   //Gets input value
   inputInitials.addEventListener("keyup", function () {
-     initials = inputInitials.value.toUpperCase();
+    initials = inputInitials.value.toUpperCase();
   });
 
   //Save
   submitBtn.addEventListener("click", function () {
-    //Increments id +1
-    id++;
+    //
+    let players;
 
-    //Save initials  in local storage
-    nameInitials = 'nameInitials' + id;
-    localStorage.setItem(nameInitials, initials);
+    let player = {
+      initials: initials,
+      score: score,
+    };
 
-    //Save score in local storage
-    scoreKey = 'scoreKey' + id;
-    localStorage.setItem(scoreKey, score);
-
-    //Create elements
-    let highscoreDiv = document.createElement('div');
-    let namePharagraph = document.createElement('span');
-    let scoreParagraph = document.createElement('span');
-    let clearBtn = document.createElement('button');
+    if (localStorage.getItem('players') === null) {
+      players = [];
+      players.push(player);
+      localStorage.setItem('players', JSON.stringify(players));
+    } else {
+      players = JSON.parse(localStorage.getItem('players'));
+      players.push(player);
+      localStorage.setItem('players', JSON.stringify(players));
+    }
 
     //Change text
     title.innerText = 'Highscores';
     submitBtn.innerText = 'Try again';
-    clearBtn.innerText = 'Clear Scores';
-    namePharagraph.innerText = localStorage.getItem(nameInitials);
-    scoreParagraph.innerText = localStorage.getItem(scoreKey);
-
-    //Set classes and attributes
+    let clearBtn = document.createElement('button');
     clearBtn.className = 'focus:outline-none bg-transparent hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white p-2 border border-indigo-500 hover:border-transparent rounded-full my-3 ml-3';
-    highscoreDiv.className = 'bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-10 text-left';
-    namePharagraph.className = 'font-bold mr-5';
-    qnTag.className = 'hidden';
-    inputInitials.className = 'hidden';
-    submitCont.className = 'col-start-2 flex mt-8 mx-auto';
-
-    //Append children
-    sectionCont.appendChild(highscoreDiv);
-    highscoreDiv.appendChild(namePharagraph);
-    highscoreDiv.appendChild(scoreParagraph);
     submitCont.appendChild(clearBtn);
+
+    let playersArr = JSON.parse(localStorage.getItem('players'));
+
+    playersArr.forEach(player => {
+      //Create elements
+      let highscoreDiv = document.createElement('div');
+      let namePharagraph = document.createElement('span');
+      let scoreParagraph = document.createElement('span');
+
+      //Set classes and attributes
+      highscoreDiv.className = 'bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-10 text-left';
+      namePharagraph.className = 'font-bold mr-5';
+      qnTag.className = 'hidden';
+      inputInitials.className = 'hidden';
+      submitCont.className = 'col-start-2 flex mt-8 mx-auto';
+
+      console.log(playersArr);
+      namePharagraph.innerText = player.initials;
+      scoreParagraph.innerText = player.score;
+      clearBtn.innerText = 'Clear Scores';
+
+      //Append children
+      sectionCont.appendChild(highscoreDiv);
+      highscoreDiv.appendChild(namePharagraph);
+      highscoreDiv.appendChild(scoreParagraph);
+    });
+
+
+    clearBtn.addEventListener('click', function () {
+      players = '';
+    })
   });
 }
