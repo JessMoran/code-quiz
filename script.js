@@ -96,7 +96,7 @@ startBtn.addEventListener("click", function () {
     let ansBtn = document.createElement('button');
 
     //Set attributes
-    ansBtn.className = 'bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full block text-left my-3';
+    ansBtn.className = 'focus:outline-none bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full block text-left my-3';
     ansBtn.setAttribute('value', opt);
 
     //Change text
@@ -114,18 +114,27 @@ startBtn.addEventListener("click", function () {
 //Validate answers
 optsCont.addEventListener('click', function (e) {
   if (e.target.value === currentEl.correct) {
-
+    //Create elements
     let correctIcon = document.createElement('i');
     let correctText = document.createElement('span');
+
+    //Set classes
     correctIcon.className = 'fas fa-check text-indigo-500';
     correctText.className = 'text-indigo-800';
-    correctText.innerText = ' Correct';
     validationCont.className = 'my-5';
 
+    //Change text
+    correctText.innerText = ' Correct';
+
+    //Append children
     validationCont.appendChild(correctIcon);
     validationCont.appendChild(correctText);
 
+    //Increments score by one
     score++;
+
+    //Save score in local storage
+    localStorage.setItem("score", score);
   } else {
     let incorrectIcon = document.createElement('i');
     let incorrectText = document.createElement('span');
@@ -150,12 +159,12 @@ function displaySubmit() {
   let submitBtn = document.createElement('button');
 
   //Set classes and attributes
-  inputInitials.className = 'bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal';
   inputInitials.setAttribute('placeholder', 'Enter initials');
-  submitBtn.className = 'bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full block text-left my-3';
-  submitBtn.id = 'submitBtn';
+  inputInitials.className = 'bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal';
+  submitBtn.className = 'focus:outline-none bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full block text-left my-3';
   startBtn.className = 'hidden';
   submitCont.className = 'col-start-2 text-center mt-8';
+  submitBtn.id = 'submitBtn';
 
   //Change text
   qnTag.innerText = 'Your final Score is: ' + score;
@@ -168,6 +177,7 @@ function displaySubmit() {
 
   inputInitials.addEventListener("keyup", function () {
     initials = inputInitials.value;
+    localStorage.setItem("nameInitials", initials);
   });
 
   //
@@ -182,15 +192,15 @@ function displaySubmit() {
     title.innerText = 'Highscores';
     submitBtn.innerText = 'Try again';
     clearBtn.innerText = 'Clear Scores';
+    namePharagraph.innerText = localStorage.getItem('nameInitials');
+    scoreParagraph.innerText = localStorage.getItem('score');;
 
     //Set classes and attributes
-    clearBtn.className = 'bg-transparent hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white p-2 border border-indigo-500 hover:border-transparent rounded-full my-3 ml-3';
+    clearBtn.className = 'focus:outline-none bg-transparent hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white p-2 border border-indigo-500 hover:border-transparent rounded-full my-3 ml-3';
     highscoreDiv.className = 'bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-10 text-left';
     namePharagraph.className = 'font-bold mr-5';
     qnTag.className = 'hidden';
     inputInitials.className = 'hidden';
-    namePharagraph.innerText = initials;
-    scoreParagraph.innerText = score;
     submitCont.className = 'col-start-2 flex mt-8 mx-auto';
 
     //Append children
@@ -200,4 +210,3 @@ function displaySubmit() {
     submitCont.appendChild(clearBtn);
   });
 }
-
