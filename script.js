@@ -12,6 +12,9 @@ let currentIndex = 0;
 let currentEl;
 let score = 0;
 let initials = '';
+let nameInitials = '';
+let scoreKey = '';
+let id = 0;
 
 //Data
 let qunsArr = [
@@ -67,17 +70,22 @@ let qunsArr = [
   }
 ];
 
+//Run the function after click
 startBtn.addEventListener("click", function () {
   //Call timer function
 
+  //Run the function until the optsContainer has no children
   while (optsCont.firstChild) {
     optsCont.removeChild(optsCont.firstChild);
   }
 
+  //Run the function until the validationContainer has no children
   while (validationCont.firstChild) {
     validationCont.removeChild(validationCont.firstChild);
   }
 
+  //Validate the current index is equal to the array length
+  //if the user answered all the questions displaySubmit runs
   if (currentIndex === qunsArr.length) {
     displaySubmit();
     return;
@@ -91,6 +99,7 @@ startBtn.addEventListener("click", function () {
 
   let answers = currentEl.ans;
 
+  //Loop the answers object and gets the options
   for (const opt in answers) {
     //Create elements
     let ansBtn = document.createElement('button');
@@ -112,6 +121,7 @@ startBtn.addEventListener("click", function () {
 });
 
 //Validate answers
+//if tha value is the sames as the correct answer it shows an icon and text
 optsCont.addEventListener('click', function (e) {
   if (e.target.value === currentEl.correct) {
     //Create elements
@@ -132,28 +142,27 @@ optsCont.addEventListener('click', function (e) {
 
     //Increments score by one
     score++;
-
-    //Save score in local storage
-    localStorage.setItem("score", score);
-  } else {
+  } else { // if tha value is not the same as the correct answer it shows an icon and text
+    //Create elements
     let incorrectIcon = document.createElement('i');
     let incorrectText = document.createElement('span');
+
+    //Set classes
     incorrectIcon.className = 'fas fa-times text-indigo-500';
     incorrectText.className = 'text-indigo-800';
-    incorrectText.innerText = ' Wrong';
     validationCont.className = 'my-5';
 
+    //Change text
+    incorrectText.innerText = ' Wrong';
+
+    //Append Children
     validationCont.appendChild(incorrectIcon);
     validationCont.appendChild(incorrectText);
   }
 });
 
+//Show submit view
 function displaySubmit() {
-  // Clear validation container
-  while (validationCont.firstChild) {
-    validationCont.removeChild(validationCont.firstChild);
-  }
-
   //Create elements
   let inputInitials = document.createElement('input');
   let submitBtn = document.createElement('button');
@@ -175,13 +184,24 @@ function displaySubmit() {
   sectionCont.appendChild(inputInitials);
   submitCont.appendChild(submitBtn);
 
+  //Gets input value
   inputInitials.addEventListener("keyup", function () {
-    initials = inputInitials.value;
-    localStorage.setItem("nameInitials", initials);
+     initials = inputInitials.value.toUpperCase();
   });
 
-  //
+  //Save
   submitBtn.addEventListener("click", function () {
+    //Increments id +1
+    id++;
+
+    //Save initials  in local storage
+    nameInitials = 'nameInitials' + id;
+    localStorage.setItem(nameInitials, initials);
+
+    //Save score in local storage
+    scoreKey = 'scoreKey' + id;
+    localStorage.setItem(scoreKey, score);
+
     //Create elements
     let highscoreDiv = document.createElement('div');
     let namePharagraph = document.createElement('span');
@@ -192,8 +212,8 @@ function displaySubmit() {
     title.innerText = 'Highscores';
     submitBtn.innerText = 'Try again';
     clearBtn.innerText = 'Clear Scores';
-    namePharagraph.innerText = localStorage.getItem('nameInitials');
-    scoreParagraph.innerText = localStorage.getItem('score');;
+    namePharagraph.innerText = localStorage.getItem(nameInitials);
+    scoreParagraph.innerText = localStorage.getItem(scoreKey);
 
     //Set classes and attributes
     clearBtn.className = 'focus:outline-none bg-transparent hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white p-2 border border-indigo-500 hover:border-transparent rounded-full my-3 ml-3';

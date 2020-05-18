@@ -8,11 +8,12 @@
   <title>Code Quiz</title>
 </head>
 <body>
-<div class="row-span-1 bg-indigo-900 py-8">
+<nav class="row-span-1 bg-indigo-900 py-8">
   <div class="grid grid-flow-col grid-cols-5">
     <div class="col-start-3 text-center">
       <h1 class="text-2xl text-indigo-100">Coding Quiz Challenge</h1>
-    </div>
+    </div> <!-- col-start-3 -->
+    <!-- Timer container -->
     <div
       class="col-start-5 p-2 bg-indigo-800 items-center leading-none lg:rounded-full flex lg:inline-flex w-2/5 mx-auto"
       role="alert">
@@ -21,30 +22,31 @@
         <span>:</span>
         <span id="seconds">00</span>
       </span>
-    </div>
-  </div>
-</div>
-<div class="grid grid-flow-col grid-cols-3 mt-20">
+    </div>  <!-- Timer container ends -->
+  </div> <!-- .grid -->
+</nav>
+<section class="grid grid-flow-col grid-cols-3 mt-20">
   <div class="col-start-2 text-center">
     <p id="title" class="text-indigo-500 text-3xl">Java Script Quiz</p>
-  </div>
-  <div id="sectionCont" class="col-start-2 text-center">
+  </div> <!-- .col-start-2 -->
+  <div id="sectionCont" class="col-start-2 text-center"> <!-- Questions section  -->
     <p id="qnTag" class="my-10">Try to answer the following code-related questions within the time. Keep in mind that
       incorrect answers will penalize your score time by ten seconds</p>
-  </div>
+  </div> <!-- .col-start-2 -->
   <div class="col-start-2 text-center">
-      <div id="optionsCont"></div>
-  </div>
+    <div id="optionsCont"></div> <!-- Answers  section  -->
+  </div> <!-- .col-start-2 -->
   <div class="col-start-2 text-center">
-      <div id="validationCont"></div>
-  </div>
-  <div id="submitCont" class="col-start-2 text-center">
+    <div id="validationCont"></div><!-- Wrong or Correct answers section  -->
+  </div> <!-- .col-start-2 -->
+  <div id="submitCont" class="col-start-2 text-center"><!-- Buttons section  -->
     <button id="startBtn"
-             class="focus:outline-none bg-transparent hover:bg-indigo-800 text-indigo-700 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded-full block mx-auto my-5">
+            class="focus:outline-none bg-transparent hover:bg-indigo-800 text-indigo-700 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded-full block mx-auto my-5">
       Start Quiz
     </button>
-  </div>
-</div>
+  </div> <!-- .col-start-2 -->
+</section>
+<!-- Scriot links -->
 <script src="script.js"></script>
 </body>
 </html>
