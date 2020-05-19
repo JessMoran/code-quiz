@@ -11,7 +11,6 @@ const validationCont = document.getElementById('validationCont');
 const secs = document.getElementById('seconds');
 let currentIndex = 0;
 let currentEl;
-let ansBtn;
 let score = 0;
 let initials = '';
 let secondsLeft = 60;
@@ -111,6 +110,17 @@ function substractTime() {
   setTime();
 }
 
+// Disabled buttons after the user click the answer
+function blockBtns() {
+  // Gets optsCont children
+  let allBtns = optsCont.childNodes;
+
+  // Sets new classes for each child
+  allBtns.forEach((element, index) => {
+    element.className = 'block bg-indigo-500 text-white font-bold py-2 px-4 rounded-full opacity-50 cursor-not-allowed my-3 focus:outline-none';
+  });
+}
+
 //Run the function after click
 startBtn.addEventListener("click", function () {
 
@@ -164,13 +174,7 @@ startBtn.addEventListener("click", function () {
 //if tha value is the sames as the correct answer it shows an icon and text
 optsCont.addEventListener('click', function (e) {
 
-  let allBtns = optsCont.childNodes;
-  console.log (allBtns);
-  console.log (allBtns[1]);
-
-  allBtns.forEach( (element, index) => {
-    element.className = 'block bg-indigo-500 text-white font-bold py-2 px-4 rounded-full opacity-50 cursor-not-allowed my-3 focus:outline-none';
-  });
+  blockBtns();
 
   if (e.target.value === currentEl.correct) {
     //Create elements
@@ -222,11 +226,13 @@ function displaySubmit() {
 
   //Set classes and attributes
   inputInitials.setAttribute('placeholder', 'Enter initials');
-  inputInitials.className = 'bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal';
-  submitBtn.className = 'focus:outline-none bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full block text-left my-3';
+  inputInitials.setAttribute('required', 'true');
+  inputInitials.className = 'w-2/3 lg:w-full bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block appearance-none leading-normal';
+  submitBtn.className = 'focus:outline-none bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full block text-left';
   startBtn.className = 'hidden';
-  submitCont.className = 'col-start-2 text-center mt-8';
+  submitCont.className = 'col-start-2 text-center mt-3';
   submitBtn.id = 'submitBtn';
+  qnTag.className = 'text-left lg:text-center my-5';
 
   //Change text
   qnTag.innerText = 'Your final Score is: ' + score;
@@ -275,10 +281,11 @@ function displaySubmit() {
       let scoreParagraph = document.createElement('span');
 
       //Set classes and attributes
-      highscoreDiv.className = 'bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-10 text-left';
+      highscoreDiv.className = 'bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mb-3 text-left w-2/3 lg:w-full';
       namePharagraph.className = 'font-bold mr-5';
       inputInitials.className = 'hidden';
       submitCont.className = 'col-start-2 flex mt-8 mx-auto';
+      qnTag.className = 'text-left lg:text-center my-5';
 
       //Change text
       namePharagraph.innerText = player.initials;
@@ -290,6 +297,15 @@ function displaySubmit() {
       highscoreCont.appendChild(highscoreDiv);
       highscoreDiv.appendChild(namePharagraph);
       highscoreDiv.appendChild(scoreParagraph);
+
+      //Clear Players Score after press clear button
+      clearBtn.addEventListener('click', function () {
+        while (highscoreCont.firstChild) {
+          highscoreCont.removeChild(highscoreCont.firstChild);
+        }
+
+        localStorage.clear();
+      })
     });
 
     //Clear values and shows the first view
@@ -303,27 +319,24 @@ function displaySubmit() {
         highscoreBtns.removeChild(highscoreBtns.firstChild);
       }
 
+      //Set the elements as the begging
       currentIndex = 0;
       secondsLeft = 60;
 
-      title.innerText = 'Java Script Quiz';
-      qnTag.innerText = 'Try to answer the following code-related questions within the time. Keep in mind that incorrect answers will penalize your score time by ten seconds.';
+      //Set classes and id
       startBtn.className = 'focus:outline-none bg-transparent hover:bg-indigo-800 text-indigo-700 font-semibold hover:text-white py-2 px-4 border border-indigo-500 hover:border-transparent rounded-full block mx-auto';
       startBtn.id = 'startBtn';
+      qnTag.className = 'text-center mt-5'
+
+      //Change text
+      title.innerText = 'Java Script Quiz';
+      qnTag.innerText = 'Try to answer the following code-related questions within the time. Keep in mind that incorrect answers will penalize your score time by ten seconds.';
       startBtn.innerText = 'Start Quiz';
     });
-
-    clearBtn.addEventListener('click', function () {
-      //Clear Players Score after press clear button
-      while (highscoreCont.firstChild) {
-        highscoreCont.removeChild(highscoreCont.firstChild);
-      }
-
-      localStorage.clear();
-    })
   });
 }
 
+//Save Players Score and initials after press submit btn
 function saveData() {
   //Set variable
   let players;
