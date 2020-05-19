@@ -11,6 +11,7 @@ const validationCont = document.getElementById('validationCont');
 const secs = document.getElementById('seconds');
 let currentIndex = 0;
 let currentEl;
+let ansBtn;
 let score = 0;
 let initials = '';
 let secondsLeft = 60;
@@ -162,6 +163,15 @@ startBtn.addEventListener("click", function () {
 //Validate answers
 //if tha value is the sames as the correct answer it shows an icon and text
 optsCont.addEventListener('click', function (e) {
+
+  let allBtns = optsCont.childNodes;
+  console.log (allBtns);
+  console.log (allBtns[1]);
+
+  allBtns.forEach( (element, index) => {
+    element.className = 'block bg-indigo-500 text-white font-bold py-2 px-4 rounded-full opacity-50 cursor-not-allowed my-3 focus:outline-none';
+  });
+
   if (e.target.value === currentEl.correct) {
     //Create elements
     let correctIcon = document.createElement('i');
@@ -171,6 +181,7 @@ optsCont.addEventListener('click', function (e) {
     correctIcon.className = 'fas fa-check text-indigo-500';
     correctText.className = 'text-indigo-800';
     validationCont.className = 'my-5';
+    optsCont.className = 'disabled';
 
     //Change text
     correctText.innerText = ' Correct';
