@@ -16,7 +16,7 @@ let timeInterval;
 
 //Set Timer
 function setTime() {
-   timeInterval = setInterval(function () {
+  timeInterval = setInterval(function () {
     secondsLeft--;
     secs.textContent = secondsLeft;
 
@@ -86,7 +86,7 @@ let qunsArr = [
   }
 ];
 
-function cleanArea (){
+function cleanArea() {
   //Clear parent questions div
   while (optsCont.firstChild) {
     optsCont.removeChild(optsCont.firstChild);
@@ -96,6 +96,13 @@ function cleanArea (){
   while (validationCont.firstChild) {
     validationCont.removeChild(validationCont.firstChild);
   }
+}
+
+function substractTime() {
+  secondsLeft -= 5;
+  secs.textContent = secondsLeft;
+  clearInterval(timeInterval);
+  setTime();
 }
 
 //Run the function after click
@@ -170,8 +177,8 @@ optsCont.addEventListener('click', function (e) {
     //Increments score by one
     score++;
   } else { // if tha value is not the same as the correct answer it shows an icon and text
-    //
-    secondsLeft -= 10;
+    //Time is subtracted from the clock if the answer is incorrect
+    substractTime();
 
     //Create elements
     let incorrectIcon = document.createElement('i');
