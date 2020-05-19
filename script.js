@@ -11,19 +11,19 @@ let currentIndex = 0;
 let currentEl;
 let score = 0;
 let initials = '';
-let nameInitials = '';
-let scoreKey = '';
 let secondsLeft = 60;
+let timeInterval;
 
 //Set Timer
 function setTime() {
-  let timeInterval = setInterval(function () {
+   timeInterval = setInterval(function () {
     secondsLeft--;
     secs.textContent = secondsLeft;
 
     if (secondsLeft === 0) {
       clearInterval(timeInterval);
-
+      cleanArea();
+      displaySubmit();
       title.innerText = 'Good try!';
 
       return secondsLeft;
@@ -42,7 +42,7 @@ let qunsArr = [
       opt3: '<script>',
       opt4: '<scripting>'
     },
-    correct: 'opt1',
+    correct: 'opt3',
   },
   {
     qn: 'What is the correct JavaScript syntax to change the content of the HTML element below? <p id="demo">This is a demonstration.</p>',
@@ -52,7 +52,7 @@ let qunsArr = [
       opt3: 'document.getElement("p").innerHTML = "Hello World!";',
       opt4: 'document.getElementByName("p").innerHTML = "Hello World!";'
     },
-    correct: 'opt1',
+    correct: 'opt2',
   },
   {
     qn: 'Where is the correct place to insert a JavaScript?',
@@ -62,14 +62,14 @@ let qunsArr = [
       opt3: 'Both the <head> section and the <body> section are correct',
       opt4: 'The <html> section'
     },
-    correct: 'opt1',
+    correct: 'opt3',
   },
   {
     qn: 'What is the correct syntax for referring to an external script called "xxx.js"?',
     ans: {
-      opt1: '<script name="xxx.js">',
+      opt1: '<script src="xxx.js">',
       opt2: '<script href="xxx.js">',
-      opt3: '<script src="xxx.js">',
+      opt3: '<script name="xxx.js">',
       opt4: '<script alt="xxx.js">'
     },
     correct: 'opt1',
@@ -82,28 +82,36 @@ let qunsArr = [
       opt3: 'alertBox("Hello World");',
       opt4: 'msg("Hello World");'
     },
-    correct: 'opt1'
+    correct: 'opt2'
   }
 ];
 
-//Run the function after click
-startBtn.addEventListener("click", function () {
-  //Call timer function
-  setTime();
-
-  //Run the function until the optsContainer has no children
+function cleanArea (){
+  //Clear parent questions div
   while (optsCont.firstChild) {
     optsCont.removeChild(optsCont.firstChild);
   }
 
-  //Run the function until the validationContainer has no children
+  //Clear parent result display
   while (validationCont.firstChild) {
     validationCont.removeChild(validationCont.firstChild);
   }
+}
 
-  //Validate the current index is equal to the array length
-  //if the user answered all the questions displaySubmit runs
+//Run the function after click
+startBtn.addEventListener("click", function () {
+
+  //Set timer first time
+  if (currentIndex === 0) {
+    //Call timer function
+    setTime();
+  }
+
+  cleanArea();
+
+  //Runs in the last question
   if (currentIndex === qunsArr.length) {
+    clearInterval(timeInterval);
     displaySubmit();
     return;
   }
@@ -162,6 +170,9 @@ optsCont.addEventListener('click', function (e) {
     //Increments score by one
     score++;
   } else { // if tha value is not the same as the correct answer it shows an icon and text
+    //
+    secondsLeft -= 10;
+
     //Create elements
     let incorrectIcon = document.createElement('i');
     let incorrectText = document.createElement('span');
@@ -210,33 +221,24 @@ function displaySubmit() {
 
   //Save
   submitBtn.addEventListener("click", function () {
-    //
-    let players;
+    //Call saveData function
+    saveData();
 
-    let player = {
-      initials: initials,
-      score: score,
-    };
-
-    if (localStorage.getItem('players') === null) {
-      players = [];
-      players.push(player);
-      localStorage.setItem('players', JSON.stringify(players));
-    } else {
-      players = JSON.parse(localStorage.getItem('players'));
-      players.push(player);
-      localStorage.setItem('players', JSON.stringify(players));
-    }
+    //Create elements
+    let clearBtn = document.createElement('button');
 
     //Change text
     title.innerText = 'Highscores';
     submitBtn.innerText = 'Try again';
-    let clearBtn = document.createElement('button');
     clearBtn.className = 'focus:outline-none bg-transparent hover:bg-indigo-500 text-indigo-700 font-semibold hover:text-white p-2 border border-indigo-500 hover:border-transparent rounded-full my-3 ml-3';
+
+    //Append children
     submitCont.appendChild(clearBtn);
 
+    //Gets players array and parse into a JSON
     let playersArr = JSON.parse(localStorage.getItem('players'));
 
+    //
     playersArr.forEach(player => {
       //Create elements
       let highscoreDiv = document.createElement('div');
@@ -250,7 +252,6 @@ function displaySubmit() {
       inputInitials.className = 'hidden';
       submitCont.className = 'col-start-2 flex mt-8 mx-auto';
 
-      console.log(playersArr);
       namePharagraph.innerText = player.initials;
       scoreParagraph.innerText = player.score;
       clearBtn.innerText = 'Clear Scores';
@@ -261,9 +262,35 @@ function displaySubmit() {
       highscoreDiv.appendChild(scoreParagraph);
     });
 
-
     clearBtn.addEventListener('click', function () {
-      players = '';
+      //Clear Players Score after press clear button
+      while (sectionCont.firstChild) {
+        sectionCont.removeChild(sectionCont.firstChild);
+      }
+
+      localStorage.clear();
     })
   });
+}
+
+function saveData() {
+  //Set variable
+  let players;
+
+  //Set object
+  let player = {
+    initials: initials,
+    score: score,
+  };
+
+  //Creates new array and save the first player
+  if (localStorage.getItem('players') === null) {
+    players = [];
+    players.push(player);
+    localStorage.setItem('players', JSON.stringify(players));
+  } else { //If the array exist just push the new player's object
+    players = JSON.parse(localStorage.getItem('players'));
+    players.push(player);
+    localStorage.setItem('players', JSON.stringify(players));
+  }
 }
